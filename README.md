@@ -20,6 +20,8 @@ Syntaksi:           Esimerkki:
 Pääohjelma tulostaa clientilta saamansa kyselyn, käyttämänsä SQL-kyselyn ja clientille
 lähettämänsä vastauksen näytölle.
 
+!!VARMISTA, ETTÄ PÄÄOHJELMASSA OLEVAT SQL-KYSELYT TOIMIVAT!!
+
 query.java
 
 Abstrakti luokka 
