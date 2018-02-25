@@ -11,7 +11,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 /**
  *
@@ -123,7 +122,7 @@ public class SQLConnection extends query {
            
             stmt.setInt(1, prepField);
             rs = stmt.executeQuery();
-             if (queryToSQL.contains("SELECT log_number, aika, ovi_ID, user_ID, name, event  FROM tapahtumat WHERE user_ID=?")) {
+             if (queryToSQL.contains("SELECT log_number, aika, ovi_ID, user_ID, name, event, eventtext FROM tapahtumat WHERE")) {
                 while (rs.next()) {
                     responseFromSQL.append(Integer.toString(rs.getInt("log_number")))
                         .append(",")
@@ -136,6 +135,8 @@ public class SQLConnection extends query {
                         .append(rs.getString("name"))
                         .append(",")
                         .append(Integer.toString(rs.getInt("event")))
+                        .append(",")
+                        .append(rs.getString("eventtext"))
                         .append(";");
                 }
                 
@@ -203,6 +204,8 @@ public class SQLConnection extends query {
                         .append(rs.getString("name"))
                         .append(",")
                         .append(Integer.toString(rs.getInt("event")))
+                        .append(",")
+                        .append(rs.getString("eventtext"))    
                         .append(";");
                 }
         

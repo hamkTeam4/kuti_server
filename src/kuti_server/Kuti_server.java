@@ -34,15 +34,15 @@ public class Kuti_server {
         //Jos käyttää XAMPP tai MAMP, en tiedä pitääkö taulun nimi korvata (esim users = kuti.users)
         //Muista muuttaa vastaavat asiat SQLConnectioniin!
         queryHash.put("kyselyUsers", "SELECT user_ID, name, pin FROM users");
-        queryHash.put("kyselyTapahtumatByID", "SELECT log_number, aika, ovi_ID, user_ID, name, event  FROM tapahtumat WHERE user_ID=?");
+        queryHash.put("kyselyTapahtumatByID", "SELECT log_number, aika, ovi_ID, user_ID, name, event, eventtext FROM tapahtumat WHERE user_ID=?");
         //queryHash.put("kyselyTapahtumatByID", "SELECT event, aika, ovi_ID, user_ID, name, error FROM tapahtumat WHERE user_ID=?");
         queryHash.put("kyselyNimet", "SELECT name FROM users");
-        queryHash.put("kyselyTapahtumatByNimi", "SELECT log_number, aika, ovi_ID, user_ID, name, event  FROM tapahtumat WHERE name=?");
-        queryHash.put("kyselyTapahtumatByTapahtuma", "SELECT log_number, aika, ovi_ID, user_ID, name, event  FROM tapahtumat WHERE event=?");
+        queryHash.put("kyselyTapahtumatByNimi", "SELECT log_number, aika, ovi_ID, user_ID, name, event, eventtext FROM tapahtumat WHERE name=?");
+        queryHash.put("kyselyTapahtumatByTapahtuma", "SELECT log_number, aika, ovi_ID, user_ID, name, event, eventtext FROM tapahtumat WHERE event=?");
+        System.out.println("Kuti Server v.0.5 \n");
         
-        System.out.println("Kuti Server v.0.5");
         while (true) {
-
+            System.out.println("Listening port " +welcomeSocket.getLocalPort());
             Socket connectionSocket = welcomeSocket.accept();
             BufferedReader inFromClient
                     = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
@@ -54,20 +54,20 @@ public class Kuti_server {
             if (separateFields.length <= 1) {
                 data.setQueryInTCP(separateFields[0]);
                 data.querySQL(queryHash.get(data.getQueryInTCP()));
-                System.out.println("Using SQL-query: " +queryHash.get(data.getQueryInTCP()));
+                System.out.println("Using SQL-query: "+queryHash.get(data.getQueryInTCP()));
             }
             else if (isInteger(separateFields[1])) {
                 data.setQueryInTCP(separateFields[0]);
                 data.setPrepField(Integer.parseInt(separateFields[1]));
                 data.querySQL(queryHash.get(data.getQueryInTCP()), data.getPrepField());
                 data.querySQL(queryHash.get(data.getQueryInTCP()));
-                System.out.println("Using SQL-query: " +queryHash.get(data.getQueryInTCP()) + data.getPrepField());
+                System.out.println("Using SQL-query: "+queryHash.get(data.getQueryInTCP())+ "\nSetting PreparedStatement argument to ["  + data.getPrepField()+"]");
             } else {
                 data.setQueryInTCP(separateFields[0]);
                 data.setFieldName(separateFields[1]);
                 data.querySQL(queryHash.get(data.getQueryInTCP()), data.getFieldName());
                 data.querySQL(queryHash.get(data.getQueryInTCP()));
-                System.out.println("Using SQL-query: " +queryHash.get(data.getQueryInTCP()) + data.getFieldName());
+                System.out.println("Using SQL-query: " +queryHash.get(data.getQueryInTCP())+ "\nSetting PreparedStatement argument to [" + data.getFieldName()+"]");
             }
 
             
