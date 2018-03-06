@@ -52,3 +52,12 @@ login.java
 
 login.properties                ->Tähän tiedostoon asetetaan tietokantayhteys, SQL-käyttäjä
                                   ja salasana. Tarkemmat ohjeet tiedostossa.
+
+
+
+
+
+
+kyselyUsers
+
+kyselyTapahtumatByID,1001

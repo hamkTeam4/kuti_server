@@ -5,7 +5,6 @@
  */
 package kuti_server;
 
-import com.mysql.jdbc.StringUtils;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -39,6 +38,7 @@ public class Kuti_server {
         queryHash.put("kyselyNimet", "SELECT name FROM users");
         queryHash.put("kyselyTapahtumatByNimi", "SELECT log_number, aika, ovi_ID, user_ID, name, event, eventtext FROM tapahtumat WHERE name=?");
         queryHash.put("kyselyTapahtumatByTapahtuma", "SELECT log_number, aika, ovi_ID, user_ID, name, event, eventtext FROM tapahtumat WHERE event=?");
+        queryHash.put("kyselyRfidPin", "SELECT user_ID, pin, name FROM users WHERE user_ID=?");
         System.out.println("Kuti Server v.0.5 \n");
         
         while (true) {
@@ -51,23 +51,25 @@ public class Kuti_server {
             sqlStatement = inFromClient.readLine();
             System.out.println("Received: " + sqlStatement);
             separateFields = sqlStatement.split(",");
-            if (separateFields.length <= 1) {
+            if (separateFields[0].contains("kysely") && separateFields.length <= 1) {
                 data.setQueryInTCP(separateFields[0]);
                 data.querySQL(queryHash.get(data.getQueryInTCP()));
                 System.out.println("Using SQL-query: "+queryHash.get(data.getQueryInTCP()));
             }
-            else if (isInteger(separateFields[1])) {
+            else if (separateFields[0].contains("kysely") && isInteger(separateFields[1])) {
                 data.setQueryInTCP(separateFields[0]);
                 data.setPrepField(Integer.parseInt(separateFields[1]));
                 data.querySQL(queryHash.get(data.getQueryInTCP()), data.getPrepField());
                 data.querySQL(queryHash.get(data.getQueryInTCP()));
                 System.out.println("Using SQL-query: "+queryHash.get(data.getQueryInTCP())+ "\nSetting PreparedStatement argument to ["  + data.getPrepField()+"]");
-            } else {
+            } else if (separateFields[0].contains("kysely")) {
                 data.setQueryInTCP(separateFields[0]);
                 data.setFieldName(separateFields[1]);
                 data.querySQL(queryHash.get(data.getQueryInTCP()), data.getFieldName());
                 data.querySQL(queryHash.get(data.getQueryInTCP()));
                 System.out.println("Using SQL-query: " +queryHash.get(data.getQueryInTCP())+ "\nSetting PreparedStatement argument to [" + data.getFieldName()+"]");
+            } else {
+                data.insertSQL(separateFields);
             }
 
             

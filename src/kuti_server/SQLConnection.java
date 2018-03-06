@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 
 /**
  *
@@ -139,6 +140,14 @@ public class SQLConnection extends query {
                         .append(rs.getString("eventtext"))
                         .append(";");
                 }
+             } else if (queryToSQL.contains("SELECT user_ID, pin, name FROM users WHERE")) {
+                 while (rs.next()){
+                     responseFromSQL.append(Integer.toString(rs.getInt("user_ID")));
+                     responseFromSQL.append(",");
+                     responseFromSQL.append(rs.getInt("pin"));
+                     responseFromSQL.append(",");
+                     responseFromSQL.append(rs.getString("name"));
+                 }
                 
             } else {
                 responseFromSQL.append("No results.");
@@ -240,6 +249,29 @@ public class SQLConnection extends query {
                 //stmt = null;
             }
         }
+    }
+    
+    @Override
+    public void insertSQL(String insertToSQL[]) throws IOException, SQLException{
+        loadDriver();
+        Calendar calendar = Calendar.getInstance();
+        java.util.Date now = calendar.getTime();
+        java.sql.Timestamp eventTimestamp = new java.sql.Timestamp(now.getTime());
+        String eventUpdate = "INSERT INTO tapahtumat (aika, ovi_ID, user_ID, name, event, eventtext) VALUES (?,?,?,?,?,?)";
+        PreparedStatement insert = getConn().prepareStatement(eventUpdate);
+        getConn().setAutoCommit(false);
+        insert.setTimestamp(1,eventTimestamp);
+        insert.setString(2,insertToSQL[0]); //oviID
+        insert.setInt(3,Integer.parseInt(insertToSQL[1])); // userID
+        insert.setString(4,insertToSQL[2]); // name
+        insert.setInt(5,Integer.parseInt(insertToSQL[3])); // error
+        insert.setString(6,insertToSQL[4]); //errormsg
+        insert.addBatch();
+        
+        int[] count = insert.executeBatch(); 
+        getConn().commit();
+        
+        
     }
 }
 

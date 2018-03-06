@@ -19,6 +19,7 @@ public abstract class query {
     protected int prepField;
     protected String fieldName;
     protected StringBuffer responseFromSQL = new StringBuffer();
+    protected String[] insertToSQL;
 
     public String getFieldName() {
         return fieldName;
@@ -63,6 +64,7 @@ public abstract class query {
     }
 
     
+    
 
     
     
@@ -75,4 +77,6 @@ public abstract class query {
     public abstract void querySQL(String queryInTCP, int prepField) throws IOException;
     
     public abstract void querySQL(String queryInTCP, String fieldName) throws IOException;
+    
+    public abstract void insertSQL(String insertToSQL[]) throws IOException, SQLException;
 }
