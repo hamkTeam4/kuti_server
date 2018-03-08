@@ -31,7 +31,7 @@ public class SQLConnection extends query {
     public void setConn(Connection conn) {
         this.conn = conn;
     }
-
+    //Hakee SQL-tietokannan kirjautumistiedon login.properties:sta ja lähettää sen SQL-palvelimelle
     @Override
     public void loadDriver() throws IOException {
         login logData = new login();
@@ -49,14 +49,13 @@ public class SQLConnection extends query {
         }
     }
 
-    @Override
+    @Override //SQL-kysely yhdellä String-muotoisella argumentilla. 
     public void querySQL(String queryToSQL) throws IOException, SQLException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         loadDriver();
 
         try {
-            //Sulkuihin SQL-kysely
             stmt = conn.prepareStatement(queryToSQL);
             rs = stmt.executeQuery();
 
@@ -112,7 +111,8 @@ public class SQLConnection extends query {
 
     }
 
-    @Override
+    @Override //SQL-kysely kahdella argumentilla (String ja int). Ensimmäinen argumentti määrittelee käytettävän SQL-kyselyn, toinen antaa arvon preparedStatementille
+              //Kysely haetaan pääohjelman hashmapista queryToSQL-muuttujaan.
     public void querySQL(String queryToSQL, int prepField) throws IOException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -189,7 +189,7 @@ public class SQLConnection extends query {
 
     }
 
-    @Override
+    @Override //SQL-kysely kahdella String muotoisella argumentilla. Muutoin kuten edellinen metodi.
     public void querySQL(String queryToSQL, String fieldName) throws IOException{
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -251,7 +251,7 @@ public class SQLConnection extends query {
         }
     }
     
-    @Override
+    @Override //SQL-insertti. Tällä metodilla viedään tapahtumatieto Ovilukijalta tietokantaan. Metodi ottaa sisäänsä StringArray-muuttujan. 
     public void insertSQL(String insertToSQL[]) throws IOException, SQLException{
         loadDriver();
         Calendar calendar = Calendar.getInstance();
@@ -277,12 +277,12 @@ public class SQLConnection extends query {
         
     }
     
-    @Override
+    @Override //Yhteyden tarkistus.
     public void checkConnection() {
         responseFromSQL.append("ok");
     }
     
-    @Override
+    @Override //TCP-kyselyn hylkäys
     public void rejectConnection() {
         responseFromSQL.append("Query rejected");
     }
