@@ -54,7 +54,7 @@ public class Kuti_server {
             separateFields = sqlStatement.split(",");
             
             //Ehtolauseet SQL-kyselyiden määrittelyksi.
-            
+            try{
             //1.Ehto. Ohjautuu metodille querySQL(String)
             if (separateFields[0].contains("kysely") && separateFields.length <= 1) {
                 data.setQueryInTCP(separateFields[0]);
@@ -90,7 +90,9 @@ public class Kuti_server {
                     data.rejectConnection();
                 }
             }
-
+            } catch (NullPointerException n) {
+                data.responseFromSQL.append("No SQL-connection");
+            }
             //Lähettää vastauksen
             outToClient.writeBytes(data.responseFromSQL.toString() + '\n');
             System.out.println("Sent: " + data.responseFromSQL.toString() + '\n');

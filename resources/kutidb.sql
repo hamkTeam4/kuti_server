@@ -53,7 +53,7 @@ INSERT INTO `lukijat` (`ovi_ID`, `pin_query`) VALUES
 --
 
 CREATE TABLE `tapahtumat` (
-  `log_number` int(6) NOT NULL,
+  `log_number` int(6) NOT NULL auto_increment PRIMARY KEY,
   `aika` timestamp(6) NOT NULL DEFAULT '0000-00-00 00:00:00.000000',
   `ovi_ID` varchar(2) NOT NULL,
   `user_ID` int(4) NOT NULL,
