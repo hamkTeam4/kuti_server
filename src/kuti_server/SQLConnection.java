@@ -270,8 +270,21 @@ public class SQLConnection extends query {
         
         int[] count = insert.executeBatch(); 
         getConn().commit();
+        responseFromSQL.append("Event from ") 
+               .append(insertToSQL[0]) 
+               .append(" sent to database.");
         
         
+    }
+    
+    @Override
+    public void checkConnection() {
+        responseFromSQL.append("ok");
+    }
+    
+    @Override
+    public void rejectConnection() {
+        responseFromSQL.append("Query rejected");
     }
 }
 

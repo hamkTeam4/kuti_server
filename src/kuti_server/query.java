@@ -79,4 +79,8 @@ public abstract class query {
     public abstract void querySQL(String queryInTCP, String fieldName) throws IOException;
     
     public abstract void insertSQL(String insertToSQL[]) throws IOException, SQLException;
+    
+    public abstract void checkConnection();
+    
+    public abstract void rejectConnection();
 }

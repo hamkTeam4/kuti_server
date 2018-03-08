@@ -39,7 +39,7 @@ public class Kuti_server {
         queryHash.put("kyselyTapahtumatByNimi", "SELECT log_number, aika, ovi_ID, user_ID, name, event, eventtext FROM tapahtumat WHERE name=?");
         queryHash.put("kyselyTapahtumatByTapahtuma", "SELECT log_number, aika, ovi_ID, user_ID, name, event, eventtext FROM tapahtumat WHERE event=?");
         queryHash.put("kyselyRfidPin", "SELECT user_ID, pin, name FROM users WHERE user_ID=?");
-        System.out.println("Kuti Server v.0.5 \n");
+        System.out.println("Kuti Server v1.0 \n");
         
         while (true) {
             System.out.println("Listening port " +welcomeSocket.getLocalPort());
@@ -68,8 +68,16 @@ public class Kuti_server {
                 data.querySQL(queryHash.get(data.getQueryInTCP()), data.getFieldName());
                 data.querySQL(queryHash.get(data.getQueryInTCP()));
                 System.out.println("Using SQL-query: " +queryHash.get(data.getQueryInTCP())+ "\nSetting PreparedStatement argument to [" + data.getFieldName()+"]");
-            } else {
+            } else if (separateFields[0].contains("pollConn")) { //Tee vielä yksi ehto, että pollConn toimii. else-lauseeseen joku, heitä bittibukettiin lause!
+                data.checkConnection();
+            } else if (separateFields[0].contains("S2")){
                 data.insertSQL(separateFields);
+            } else {
+                try{
+                    data.rejectConnection();
+                } catch (ArrayIndexOutOfBoundsException a) {
+                    data.rejectConnection();
+                }
             }
 
             
